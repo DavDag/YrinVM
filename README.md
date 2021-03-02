@@ -1,11 +1,11 @@
 # Yrin VM
 Early preview.
-It's a stack-based VM (Virtual Machine) which runs particular bytecode.
+It's a stack-based VM (Virtual Machine) which runs special bytecode.
 
 ### Bytecode format
 Instructions are 8 bytes wide.
 
-1 byte | 1 bytes | 2 bytes | 8 bytes
+1 byte | 1 bytes | 2 bytes | 4 bytes
 ------ | ------- | ------- | -------
 OpCode | Flags | ExtData | Data
 A | B | C | D

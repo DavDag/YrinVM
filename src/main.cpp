@@ -5,7 +5,7 @@
 // 1st argument (argv[1]) must be a path to the file to read.
 int main(int argc, char** argv) {
     try {
-        const YVM::CODE::Data& code = YVM::Loader::load(argc, argv);
+        const YVM::Bytecode::Data& code = YVM::Loader::load(argc, argv);
         YVM::Executor::execute(code);
     } catch (YVM::Exception::YvmLoaderException& exception) {
         ERROR_LOG("VM loader crashed. Error code %d\n", exception.errorCode);

@@ -4,3 +4,4 @@
 /cmake-build-debug-loader/
 /cmake-build-release/
 .idea/
+*.exe

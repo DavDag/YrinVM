@@ -15,4 +15,4 @@ ENDIF(LOADER_LOG)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${PROJECT_SOURCE_DIR})
 
-add_executable(YrinVM src/main.cpp src/loader.hpp src/common.hpp src/loader.cpp src/executor.hpp src/yvmexception.hpp src/executor.cpp)
+add_executable(YrinVM src/main.cpp src/loader.hpp src/common.hpp src/loader.cpp src/executor.hpp src/yvmexception.hpp src/executor.cpp src/operations.hpp src/operations.cpp src/bytecode.hpp)

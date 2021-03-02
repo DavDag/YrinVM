@@ -6,28 +6,29 @@
 namespace YVM::Exception {
 
     // Error list
-    enum ERRORS : int {
-        INVALID_CMD_LINE_ARGUMENT = 0x001,
-        UNABLE_TO_OPEN_FILE = 0x002,
-        VERSION_NOT_SUPPORTED = 0x003,
-        POP_FROM_EMPTY_STACK = 0x004,
-        INDEX_OUT_OF_BOUNDS = 0x005
+    namespace ERRORS {
+        constexpr int INVALID_CMD_LINE_ARGUMENT = 0x001;
+        constexpr int UNABLE_TO_OPEN_FILE = 0x002;
+        constexpr int VERSION_NOT_SUPPORTED = 0x003;
+        constexpr int POP_FROM_EMPTY_STACK = 0x004;
+        constexpr int INDEX_OUT_OF_BOUNDS = 0x005;
+        constexpr int WRONG_ARGUMENT_TYPE = 0x006;
     };
 
-    class YvmException : public std::exception {
-    public:
+    // Generic YVM Exception
+    struct YvmException : public std::exception {
         const int errorCode;
-        explicit YvmException(ERRORS errorCode) : errorCode(errorCode) {}
+        explicit YvmException(int code) : errorCode(code) {}
     };
 
-    class YvmLoaderException : public YvmException {
-    public:
-        explicit YvmLoaderException(ERRORS errorCode) : YvmException(errorCode) {}
+    // Exception generated from the Loader
+    struct YvmLoaderException : public YvmException {
+        explicit YvmLoaderException(int code) : YvmException(code) {}
     };
 
-    class YvmExecutorException : public YvmException {
-    public:
-        explicit YvmExecutorException(ERRORS errorCode) : YvmException(errorCode) {}
+    // Exception generated from the Executor
+    struct YvmExecutorException : public YvmException {
+        explicit YvmExecutorException(int code) : YvmException(code) {}
     };
 
 } // YVM::Exception

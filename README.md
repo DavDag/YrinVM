@@ -1,5 +1,5 @@
 # Yrin VM
-Early preview. [YrinLang repo link](https://github.com/tommymarto/YrinLang)
+Early preview. [YrinLang repo link](https://github.com/tommymarto/YrinLang).<br>
 It's a stack-based VM (Virtual Machine) which runs special bytecode.
 
 ### Bytecode format

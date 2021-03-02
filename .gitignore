@@ -3,5 +3,7 @@
 /cmake-build-debug-executor/
 /cmake-build-debug-loader/
 /cmake-build-release/
+/cmake-build-minsizerel/
+/cmake-build-runtests/
 .idea/
 *.exe

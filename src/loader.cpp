@@ -21,7 +21,7 @@ namespace YVM::Loader {
         file.read(reinterpret_cast<char *>(&fileMetadata), sizeof(Bytecode::Metadata));
 
         // 1.1 Version check
-        LOG("===============================\nCurrent YVM version is %d.%d.%c-%d.\n===============================\n",
+        DEBUG_LOG("===============================\nCurrent YVM version is %d.%d.%c-%d.\n===============================\n",
                Bytecode::CURRENT_VERSION.major, Bytecode::CURRENT_VERSION.minor,
                Bytecode::CURRENT_VERSION.type, Bytecode::CURRENT_VERSION.release);
         if (fileMetadata.version != Bytecode::CURRENT_VERSION) {

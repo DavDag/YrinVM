@@ -8,10 +8,7 @@
 namespace YVM::Loader {
 
     // Load code from file (argv[1] contains file path)
-    const Bytecode::Data& load(int argc, char **argv);
-
-    // Check if an Instruction is well-formed.
-    void check_instruction(const Bytecode::Instruction &i);
+    const Bytecode::Data &load(const char *filePath);
 
 } // YVM::Loader
 

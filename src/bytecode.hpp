@@ -5,6 +5,7 @@
 
 namespace YVM::Bytecode {
 
+    // Current VM Version codes
     constexpr int YVM_CODE_VERSION_MAJOR = 0;
     constexpr int YVM_CODE_VERSION_MINOR = 1;
     constexpr int YVM_CODE_VERSION_TYPE = 'b';

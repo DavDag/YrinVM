@@ -4,19 +4,12 @@
 
 namespace YVM::Loader {
 
-    const Bytecode::Data &load(int argc, char **argv) {
+    const Bytecode::Data &load(const char *filePath) {
         // Sanity checks
         static_assert(sizeof(Bytecode::Instruction) == 8, "Instruction size must be 8.\n");
         static_assert(sizeof(Bytecode::Metadata) % 8 == 0, "Metadata must be factor of 8.\n");
 
-        // Check argument count
-        if (argc == 0) {
-            ERROR_LOG("Pass the file path as first argument\n");
-            throw Exception::YvmLoaderException(YVM::Exception::ERRORS::INVALID_CMD_LINE_ARGUMENT);
-        }
-
-        // Retrieve file_path and open file
-        const char *filePath = argv[1];
+        // Open file
         std::ifstream file(filePath, std::ios::out | std::ios::binary);
         if (!file.good()) {
             ERROR_LOG("Unable to open file %s\n", filePath);
@@ -28,7 +21,7 @@ namespace YVM::Loader {
         file.read(reinterpret_cast<char *>(&fileMetadata), sizeof(Bytecode::Metadata));
 
         // 1.1 Version check
-        printf("===============================\nCurrent YVM version is %d.%d.%c-%d.\n===============================\n",
+        LOG("===============================\nCurrent YVM version is %d.%d.%c-%d.\n===============================\n",
                Bytecode::CURRENT_VERSION.major, Bytecode::CURRENT_VERSION.minor,
                Bytecode::CURRENT_VERSION.type, Bytecode::CURRENT_VERSION.release);
         if (fileMetadata.version != Bytecode::CURRENT_VERSION) {

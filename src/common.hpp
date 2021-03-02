@@ -3,6 +3,8 @@
 #ifndef YRINVM_COMMON_HPP
 #define YRINVM_COMMON_HPP
 
+#define LOG(...) fprintf(stdout, __VA_ARGS__)
+
 #define ERROR_LOG(...) fprintf(stderr, __VA_ARGS__)
 
 #ifndef NDEBUG

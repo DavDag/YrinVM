@@ -7,13 +7,13 @@
 
 #define ERROR_LOG(...) fprintf(stderr, __VA_ARGS__)
 
-#ifndef NDEBUG
-#define DEBUG_LOG(...) fprintf(stdout, __VA_ARGS__)
-#else
+#ifdef NDEBUG
 #define DEBUG_LOG(...)
+#else
+#define DEBUG_LOG(...) fprintf(stdout, __VA_ARGS__)
 #endif
 
-#ifdef LOADER_LOG
+#if LOADER_LOG
 #define LOADER_DEBUG_LOG(...) DEBUG_LOG(__VA_ARGS__)
 #else
 #define LOADER_DEBUG_LOG(...)

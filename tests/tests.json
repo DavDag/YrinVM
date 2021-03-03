@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "version": [0, 1, "b", 1]
+  },
+  "flags": {
+    "NUMBER_TYPE": 0
+  },
+  "sessions": {
+    "name": "Code metadata tests",
+    "tests": {
+      "outName": "01"
+    }
+  }
+}

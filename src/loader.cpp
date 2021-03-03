@@ -13,7 +13,7 @@ namespace YVM::Loader {
         std::ifstream file(filePath, std::ios::out | std::ios::binary);
         if (!file.good()) {
             ERROR_LOG("Unable to open file %s\n", filePath);
-            throw Exception::YvmLoaderException(Exception::ERRORS::UNABLE_TO_OPEN_FILE);
+            throw Exception::YvmLoaderException(Exception::Errors::UNABLE_TO_OPEN_FILE);
         }
 
         // 1. Read metadata
@@ -28,7 +28,7 @@ namespace YVM::Loader {
             ERROR_LOG("Version %d.%d.%c-%d is not supported\n",
                       fileMetadata.version.major, fileMetadata.version.minor,
                       fileMetadata.version.type, fileMetadata.version.release);
-            throw Exception::YvmLoaderException(Exception::ERRORS::VERSION_NOT_SUPPORTED);
+            throw Exception::YvmLoaderException(Exception::Errors::VERSION_NOT_SUPPORTED);
         }
 
         auto *data = new Bytecode::Data{

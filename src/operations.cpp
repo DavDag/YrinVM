@@ -8,7 +8,7 @@ namespace YVM::Operations {
     inline RntObj pop_from_stack(std::vector<RntObj> &stack) {
         if (stack.empty()) {
             ERROR_LOG("Trying to pop from empty stack.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::POP_FROM_EMPTY_STACK);
+            throw Exception::YvmExecutorException(Exception::Errors::POP_FROM_EMPTY_STACK);
         }
         const auto &obj = stack.back();
         stack.pop_back();
@@ -19,7 +19,7 @@ namespace YVM::Operations {
     inline RntObj load_from_stack(std::vector<RntObj> &stack, int pos) {
         if (stack.size() <= pos) {
             ERROR_LOG("Index out of bounds: trying to access position %d with size %d.\n", pos, stack.size());
-            throw Exception::YvmExecutorException(Exception::ERRORS::INDEX_OUT_OF_BOUNDS);
+            throw Exception::YvmExecutorException(Exception::Errors::INDEX_OUT_OF_BOUNDS);
         }
         return stack[stack.size() - pos - 1];
     }
@@ -75,7 +75,7 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(obj1.decimal() + obj2.decimal()));
         } else {
             ERROR_LOG("Invalid operation. ADD operation accepts 2 INTEGERS or 2 DECIMALS.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::WRONG_ARGUMENT_TYPE);
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 
@@ -90,7 +90,7 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(obj1.decimal() - obj2.decimal()));
         } else {
             ERROR_LOG("Invalid operation. SUB operation accepts 2 INTEGERS or 2 DECIMALS.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::WRONG_ARGUMENT_TYPE);
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 
@@ -105,7 +105,7 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(obj1.decimal() * obj2.decimal()));
         } else {
             ERROR_LOG("Invalid operation. MUL operation accepts 2 INTEGERS or 2 DECIMALS.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::WRONG_ARGUMENT_TYPE);
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 
@@ -120,7 +120,7 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(obj1.decimal() / obj2.decimal()));
         } else {
             ERROR_LOG("Invalid operation. DIV operation accepts 2 INTEGERS or 2 DECIMALS.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::WRONG_ARGUMENT_TYPE);
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 
@@ -133,7 +133,7 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(obj1.integer() % obj2.integer()));
         } else {
             ERROR_LOG("Invalid operation. MOD operation use 2 INTEGERS.\n");
-            throw Exception::YvmExecutorException(Exception::ERRORS::WRONG_ARGUMENT_TYPE);
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 

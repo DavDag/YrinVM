@@ -71,7 +71,7 @@ namespace YVM::Executor {
         LOG("\n");
     }
 
-// Execute code
+    // Execute code
     void execute(const Bytecode::Data &code, ExecResult *result = nullptr);
 
 } // YVM::Executer

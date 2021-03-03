@@ -17,7 +17,7 @@ ENDIF ()
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-SET(SOURCE src/loader.hpp src/common.hpp src/loader.cpp src/executor.hpp src/yvmexception.hpp src/executor.cpp src/operations.hpp src/operations.cpp src/bytecode.hpp)
+SET(SOURCE src/loader.hpp src/common.hpp src/loader.cpp src/executor.hpp src/yvmexception.hpp src/executor.cpp src/operations.hpp src/operations.cpp src/bytecode.hpp tests/tests.hpp tests/tests.cpp)
 
 IF (!RUN_TESTS)
     ADD_EXECUTABLE(YrinVM src/main.cpp ${SOURCE})

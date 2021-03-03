@@ -3,7 +3,7 @@
 
 namespace YVM::Executor {
 
-    void execute(const Bytecode::Data &code, ExecResult* result) {
+    void execute(const Bytecode::Data &code, ExecResult *result) {
         // Data Stack
         std::vector<RntObj> dataStack;
         // Runtime Stack
@@ -12,8 +12,8 @@ namespace YVM::Executor {
         // Operation table
         using op_callback = void (*)(const Bytecode::Instruction &, std::vector<RntObj> &, std::vector<RntObj> &);
         const std::vector<op_callback> op_table = {
-                Operations::op_zero, Operations::op_push, Operations::op_pop, Operations::op_store, Operations::op_load,
-                Operations::op_add, Operations::op_sub, Operations::op_mul, Operations::op_div, Operations::op_mod
+            Operations::op_zero, Operations::op_push, Operations::op_pop, Operations::op_store, Operations::op_load,
+            Operations::op_add, Operations::op_sub, Operations::op_mul, Operations::op_div, Operations::op_mod
         };
 
         // Main loop

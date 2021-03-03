@@ -21,9 +21,9 @@ namespace YVM::Loader {
         file.read(reinterpret_cast<char *>(&fileMetadata), sizeof(Bytecode::Metadata));
 
         // 1.1 Version check
-        DEBUG_LOG("===============================\nCurrent YVM version is %d.%d.%c-%d.\n===============================\n",
-               Bytecode::CURRENT_VERSION.major, Bytecode::CURRENT_VERSION.minor,
-               Bytecode::CURRENT_VERSION.type, Bytecode::CURRENT_VERSION.release);
+        DEBUG_LOG("Current YVM version is %d.%d.%c-%d.\n",
+                  Bytecode::CURRENT_VERSION.major, Bytecode::CURRENT_VERSION.minor,
+                  Bytecode::CURRENT_VERSION.type, Bytecode::CURRENT_VERSION.release);
         if (fileMetadata.version != Bytecode::CURRENT_VERSION) {
             ERROR_LOG("Version %d.%d.%c-%d is not supported\n",
                       fileMetadata.version.major, fileMetadata.version.minor,
@@ -32,8 +32,8 @@ namespace YVM::Loader {
         }
 
         auto *data = new Bytecode::Data{
-                .version = fileMetadata.version,
-                .instructions = std::vector<Bytecode::Instruction>()
+            .version = fileMetadata.version,
+            .instructions = std::vector<Bytecode::Instruction>()
         };
 
         // 2. Read instructions list

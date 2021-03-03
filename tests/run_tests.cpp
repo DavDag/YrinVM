@@ -116,14 +116,14 @@ struct TestSession {
 int main() {
     // Initialize tests
     std::vector<TestSession> tests = {
-            TestSession{
-                    .name = "EXAMPLE 1",
-                    .tests = {
-                            SingleTest(".\\tests\\00_helloworld.yrin", ExecutionResult({}, {}))
-                    }
+        TestSession{
+            .name = "EXAMPLE 1",
+            .tests = {
+                SingleTest(".\\tests\\00_helloworld.yrin", ExecutionResult({}, {}))
             }
+        }
     };
     // Run tests
-    for (const auto& test : tests) test.run();
+    for (const auto &test : tests) test.run();
     return 0;
 }

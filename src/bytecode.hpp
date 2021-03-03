@@ -32,10 +32,10 @@ namespace YVM::Bytecode {
 
     // Current YVM version
     constexpr Version CURRENT_VERSION = {
-            .major = YVM_CODE_VERSION_MAJOR,
-            .minor = YVM_CODE_VERSION_MINOR,
-            .type = YVM_CODE_VERSION_TYPE,
-            .release = YVM_CODE_VERSION_RELEASE
+        .major = YVM_CODE_VERSION_MAJOR,
+        .minor = YVM_CODE_VERSION_MINOR,
+        .type = YVM_CODE_VERSION_TYPE,
+        .release = YVM_CODE_VERSION_RELEASE
     };
 
     // Flags list

@@ -7,7 +7,6 @@
 
 namespace YVM::Loader {
 
-    // Load code from file (argv[1] contains file path)
     const Bytecode::Data &load(const char *filePath);
 
 } // YVM::Loader

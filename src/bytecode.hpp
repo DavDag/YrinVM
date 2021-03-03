@@ -20,7 +20,7 @@ namespace YVM::Bytecode {
 
         // Operator overloading for equals
         bool operator!=(const Version &rhs) const {
-            return major != rhs.major || minor != rhs.minor || type != rhs.type || release != rhs.release;
+            return major != rhs.major || minor != rhs.minor; /* || type != rhs.type || release != rhs.release;*/
         }
     };
 
@@ -46,7 +46,8 @@ namespace YVM::Bytecode {
     // Bytecode instruction
     struct Instruction {
         int opcode: 8;
-        int flags: 24;
+        int flags: 8;
+        int extraData: 16;
         union {
             int data_as_int;
             float data_as_float;

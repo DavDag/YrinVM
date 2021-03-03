@@ -13,7 +13,7 @@
 #define DEBUG_LOG(...) fprintf(stdout, __VA_ARGS__)
 #endif
 
-#if LOADER_LOG
+#ifdef LOADER_LOG
 #define LOADER_DEBUG_LOG(...) DEBUG_LOG(__VA_ARGS__)
 #else
 #define LOADER_DEBUG_LOG(...)
@@ -26,7 +26,6 @@
 #endif
 
 #include <cstdio>
-#include <cstdint>
 #include <vector>
 #include "yvmexception.hpp"
 #include "bytecode.hpp"

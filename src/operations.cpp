@@ -41,6 +41,9 @@ namespace YVM::Operations {
             push_into_stack(rntStack, RntObj(instr.data_as_int));
         } else if (instr.data_is_dec()) {
             push_into_stack(rntStack, RntObj(instr.data_as_float));
+        } else {
+            ERROR_LOG("Invalid operation. PUSH operation accepts 1 INTEGER or 1 DECIMAL.\n");
+            throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
     }
 
@@ -122,6 +125,7 @@ namespace YVM::Operations {
             ERROR_LOG("Invalid operation. DIV operation accepts 2 INTEGERS or 2 DECIMALS.\n");
             throw Exception::YvmExecutorException(Exception::Errors::WRONG_ARGUMENT_TYPE);
         }
+        // TODO: Div zero
     }
 
     // Pop two objects from Runtime Stack and push the sub

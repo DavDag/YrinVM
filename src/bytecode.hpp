@@ -50,7 +50,7 @@ namespace YVM::Bytecode {
         int extraData: 16;
         union {
             int data_as_int;
-            float data_as_float;
+            float data_as_float; // TODO: Double (?)
         };
         // Flags utils
         [[nodiscard]] inline int data_is_int() const noexcept { return (flags & InstructionFlags::NUMBER_TYPE_FLAG); }

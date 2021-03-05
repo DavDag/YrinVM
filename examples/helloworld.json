@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "version": "0.1.b-1"
+  },
+  "out-filename": "00_hello_world.yrin",
+  "main": [
+    ["MAIN"],
+    ["PUSHf", 1.00001],
+    ["PUSHf", 1.00002],
+    ["ADDf"],
+    ["STORE"],
+    ["LOAD", 0],
+    ["LOAD", 0],
+    ["ADDf"],
+    ["STORE"],
+    ["LOAD", 0],
+    ["LOAD", 1],
+    ["ADDf"],
+    ["STORE"],
+    ["PUSHi", 1],
+    ["PUSHi", 2],
+    ["PUSHi", 3],
+    ["SUBi"],
+    ["SUBi"],
+    ["STORE"]
+  ]
+}

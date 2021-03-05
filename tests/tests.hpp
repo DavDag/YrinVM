@@ -3,9 +3,9 @@
 #ifndef YRINVM_TESTS_HPP
 #define YRINVM_TESTS_HPP
 
-#include "../src/common.hpp"
-#include "../src/loader.hpp"
-#include "../src/executor.hpp"
+#include "../src/old/common.hpp"
+#include "../src/old/loader.hpp"
+#include "../src/old/executor.hpp"
 
 using ExecutionResult = YVM::Executor::ExecResult;
 namespace ExecutionErrors = YVM::Exception::Errors;

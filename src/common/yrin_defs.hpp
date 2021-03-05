@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef YRINVM_COMMON_HPP
-#define YRINVM_COMMON_HPP
+#ifndef YRINVM_YRIN_DEFS_HPP
+#define YRINVM_YRIN_DEFS_HPP
 
 #define LOG(...) fprintf(stdout, __VA_ARGS__)
 
@@ -26,8 +26,7 @@
 #endif
 
 #include <cstdio>
-#include <vector>
-#include "yvmexception.hpp"
-#include "bytecode.hpp"
 
-#endif //YRINVM_COMMON_HPP
+using BYTE = unsigned char;
+
+#endif //YRINVM_YRIN_DEFS_HPP

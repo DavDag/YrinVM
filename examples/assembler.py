@@ -23,38 +23,58 @@ def assemble(meta, byte):
 
     # Dump
     with open(byte["out-filename"], "wb") as of:
-        b = bytes([])
+        # Dump version
+        version = byte["metadata"]["version"]
+        b = bytes(version, "UTF-8")
+
+        # Dump Constant Pool Size as 32-bit int
+        b += bytes_for_data("i", len(b))
+
+        # Dump instructions
         for i in instrList:
             b += bytes_for_instruction(i, instrTable)
+
+        # Write btyes into file
         of.write(b)
 
 
 # Return instruction as bytes
 def bytes_for_instruction(instr, table):
     name = instr[0]
-    opcode = bytes(ctypes.c_byte(table[name]))
+    opcode = bytes_for_data("b", table[name])
     if name == "PUSHb0" or name == "PUSHb1":
         return opcode
     elif name[:4] == "PUSH":
         return opcode + bytes_for_data(name[4::], instr[1])
     elif name == "LOAD":
-        return opcode + bytes(ctypes.c_int16(instr[1]))
+        return opcode + bytes_for_data("sz", instr[1])
     else:
         return opcode
 
 
 # Return data as bytes
 def bytes_for_data(typ, data):
+    # Integer (32bit)
     if typ == "i":
-        return bytes(ctypes.c_int(data))
+        return bytes(ctypes.c_int32(data))
+    # Floating point (32bit)
     elif typ == "f":
         return bytes(ctypes.c_float(data))
+    # Double precision floating point (64bit)
     elif typ == "d":
         return bytes(ctypes.c_double(data))
+    # Char (8bit)
     elif typ == "c":
         return bytes(ctypes.c_char(data))
+    # String (16bit + 8bit * N)
     elif typ == "s":
-        return bytes(ctypes.c_int16(data.size())) + bytes(data)
+        return bytes_for_data("sz", data.size()) + bytes(data, "UTF-8")
+    # Byte (8bit)
+    elif typ == "b":
+        return bytes(ctypes.c_byte(data))
+    # Size (16bit)
+    elif typ == "sz":
+        return bytes(ctypes.c_int16(data))
     else:
         print("type: " + typ + " not supported.")
         exit(1)

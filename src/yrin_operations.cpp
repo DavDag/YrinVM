@@ -1,70 +1,71 @@
-#include "yrin_vm.hpp"
+#include "yvm.hpp"
+
 #include <typeinfo>
 
 namespace Yrin {
 
-    int op_reserved(Yrin::VM &vm) noexcept {
+    int op_reserved(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{RESERVED}\n");
         return 0;
     }
 
-    int op_error(Yrin::VM &vm) noexcept {
+    int op_error(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{ERROR}\n");
         return 0;
     }
 
-    int op_return(Yrin::VM &vm) noexcept {
+    int op_return(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{RETURN}\n");
         vm.ret();
         return 0;
     }
 
     template<typename T>
-    int op_push(Yrin::VM &vm) noexcept {
+    int op_push(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(T).name());
         T i = *reinterpret_cast<T *>(vm.next(sizeof(T)));
         vm.push(i);
         return 0;
     }
 
-    int op_push_b0(Yrin::VM &vm) noexcept {
+    int op_push_b0(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(false).name());
         vm.push(false);
         return 0;
     }
 
-    int op_push_b1(Yrin::VM &vm) noexcept {
+    int op_push_b1(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(true).name());
         vm.push(true);
         return 0;
     }
 
-    int op_push_s(Yrin::VM &vm) noexcept {
+    int op_push_s(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{PUSHs}\n");
         return 0;
     }
 
-    int op_pop(Yrin::VM &vm) noexcept {
+    int op_pop(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{POP}\n");
         vm.pop();
         return 0;
     }
 
-    int op_load(Yrin::VM &vm) noexcept {
+    int op_load(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{LOAD}\n");
         int i = *reinterpret_cast<int *>(vm.next(2 * sizeof(BYTE))) & 0x0000ffff;
         vm.load(i);
         return 0;
     }
 
-    int op_store(Yrin::VM &vm) noexcept {
+    int op_store(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{STORE}\n");
         vm.store();
         return 0;
     }
 
     template<typename T1, typename T2>
-    int op_add(Yrin::VM &vm) noexcept {
+    int op_add(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{ADD} %s + %s\n", typeid(T1).name(), typeid(T2).name());
         T1& op1 = *vm.pop().data<T1>();
         T2& op2 = *vm.pop().data<T2>();
@@ -73,7 +74,7 @@ namespace Yrin {
     }
 
     template<typename T1, typename T2>
-    int op_sub(Yrin::VM &vm) noexcept {
+    int op_sub(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{SUB} %s - %s\n", typeid(T1).name(), typeid(T2).name());
         T1& op1 = *vm.pop().data<T1>();
         T2& op2 = *vm.pop().data<T2>();
@@ -82,7 +83,7 @@ namespace Yrin {
     }
 
     template<typename T1, typename T2>
-    int op_mul(Yrin::VM &vm) noexcept {
+    int op_mul(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{MUL} %s * %s\n", typeid(T1).name(), typeid(T2).name());
         T1& op1 = *vm.pop().data<T1>();
         T2& op2 = *vm.pop().data<T2>();
@@ -91,7 +92,7 @@ namespace Yrin {
     }
 
     template<typename T1, typename T2>
-    int op_div(Yrin::VM &vm) noexcept {
+    int op_div(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{DIV} %s / %s\n", typeid(T1).name(), typeid(T2).name());
         T1& op1 = *vm.pop().data<T1>();
         T2& op2 = *vm.pop().data<T2>();
@@ -100,7 +101,7 @@ namespace Yrin {
     }
 
     template<typename T1, typename T2>
-    int op_mod(Yrin::VM &vm) noexcept {
+    int op_mod(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{MOD} %s %% %s\n", typeid(T1).name(), typeid(T2).name());
         T1& op1 = *vm.pop().data<T1>();
         T2& op2 = *vm.pop().data<T2>();
@@ -108,9 +109,9 @@ namespace Yrin {
         return 0;
     }
 
-    op_callback Yrin::VM::OpTable[256] = {op_error};
-    void Yrin::VM::init_table() noexcept {
-        auto &t = Yrin::VM::OpTable;
+    op_callback VM::OpTable[256] = {op_error};
+    void VM::init_table() noexcept {
+        auto &t = VM::OpTable;
         // Specials
         t[0] = op_reserved;
         t[1] = op_return;

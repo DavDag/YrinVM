@@ -3,7 +3,7 @@
 #ifndef YRINVM_YRIN_DATATYPES_HPP
 #define YRINVM_YRIN_DATATYPES_HPP
 
-#include "../common/yrin_defs.hpp"
+#include "yrin_defs.hpp"
 
 namespace Yrin {
 

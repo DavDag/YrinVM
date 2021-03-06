@@ -1,4 +1,4 @@
-#include "../include/yvm.hpp"
+#include "yvm.hpp"
 
 inline void log_yvm_usage() noexcept {
     LOG("Usage:\n");

@@ -5,9 +5,6 @@
 
 #include <vector>
 #include <stack>
-#include "../common/yrin_defs.hpp"
-#include "yrin_datatypes.hpp"
-#include "yrin_stack.hpp"
 
 namespace Yrin {
 

@@ -41,17 +41,13 @@ namespace Yrin {
         BYTE *next(size_t) noexcept;
 
         // Push data into RuntimeStack
-        inline void push(int i) noexcept { rntStack.push(i); }
-        inline void push(long long ll) noexcept { rntStack.push(ll); }
-        inline void push(float f) noexcept { rntStack.push(f); }
-        inline void push(double d) noexcept { rntStack.push(d); }
-        inline void push(char c) noexcept { rntStack.push(c); }
-        inline void push(bool b) noexcept { rntStack.push(b); }
+        template<typename T>
+        inline void push(T t) noexcept { rntStack.push(t); }
         inline void push(void* ptr, int type) noexcept { rntStack.push(ptr, type); }
 
         // Retrieve data from RuntimeStack
         template<typename T>
-        inline int pop() noexcept { return rntStack.pop().data<T>(); }
+        inline T pop() noexcept { return rntStack.pop().data<T>(); }
 
         // Remove data from RuntimeStack
         inline void pop() noexcept { rntStack.pop(); }

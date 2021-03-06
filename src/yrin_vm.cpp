@@ -3,10 +3,10 @@
 namespace Yrin {
 
     void VM::run() {
-        // TODO: exception handling
+        // TODO: error handling
         // Main loop
         while (!ips.empty()) {
-            BYTE instruction = code[ips.top()++];
+            const BYTE& instruction = code[ips.top()++];
             OpTable[instruction](*this);
         }
     }

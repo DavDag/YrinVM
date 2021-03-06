@@ -12,6 +12,7 @@ namespace Yrin {
         TypeTable[TypeId::Double].size = sizeof(double);
         TypeTable[TypeId::Boolean].size = sizeof(bool);
         TypeTable[TypeId::Character].size = sizeof(char);
+        TypeTable[TypeId::Pointer].size = sizeof(void*);
     }
 
 } // Yrin

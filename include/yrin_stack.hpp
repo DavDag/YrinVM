@@ -19,6 +19,7 @@ namespace Yrin::Memory {
         constexpr int Double = 4;
         constexpr int Boolean = 5;
         constexpr int Character = 6;
+        constexpr int Pointer = 7;
     }
 
     // Custom memory management
@@ -56,7 +57,7 @@ namespace Yrin::Memory {
             explicit Element(bool b) : value{.b = b}, type(TypeId::Integer) {}
             explicit Element(char c) : value{.c = c}, type(TypeId::Integer) {}
             explicit Element(void *ptr, int type) : value{.ptr = ptr}, type(type) {}
-            // TODO: Si può fare meglio ?
+            // TODO: Find another way to do it...
             // Convenience function to retrieve data
             template<typename T>
             [[nodiscard]] inline T &data() const noexcept { return *reinterpret_cast<T*>((void*)&value); }

@@ -28,7 +28,7 @@ def assemble(meta, byte):
         b = bytes(version, "UTF-8")
 
         # Dump Constant Pool Size as 32-bit int
-        b += bytes_for_data("i", len(b))
+        b += bytes_for_data("i", 0)
 
         # Dump instructions
         for i in instrList:
@@ -57,6 +57,9 @@ def bytes_for_data(typ, data):
     # Integer (32bit)
     if typ == "i":
         return bytes(ctypes.c_int32(data))
+    # Long (64bit)
+    elif typ == "l":
+        return bytes(ctypes.c_longlong(data))
     # Floating point (32bit)
     elif typ == "f":
         return bytes(ctypes.c_float(data))

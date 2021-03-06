@@ -40,6 +40,7 @@ void Yrin::VM::read(const char *filePath) {
         code.push_back(byte);
         file.read(reinterpret_cast<char *>(&byte), sizeof(BYTE));
     }
+    LOADER_DEBUG_LOG("\n");
 
     // 3. Insert starting instruction
     ips.push(0);

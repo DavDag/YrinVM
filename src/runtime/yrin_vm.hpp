@@ -53,6 +53,7 @@ namespace Yrin {
 
         // Push data into RuntimeStack
         inline void push(int i) noexcept { _push(reinterpret_cast<void *>(&i), sizeof(int)); }
+        inline void push(long long l) noexcept { _push(reinterpret_cast<void *>(&l), sizeof(long long)); }
         inline void push(bool b) noexcept { _push(reinterpret_cast<void *>(&b), sizeof(bool)); }
         inline void push(float f) noexcept { _push(reinterpret_cast<void *>(&f), sizeof(float)); }
         inline void push(double d) noexcept { _push(reinterpret_cast<void *>(&d), sizeof(double)); }

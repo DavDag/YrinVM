@@ -7,5 +7,6 @@
 /cmake-build-runtests/
 /.idea/
 /exclude/
+/venv/
 *.exe
 *.dll

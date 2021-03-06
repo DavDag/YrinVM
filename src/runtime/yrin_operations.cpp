@@ -18,43 +18,23 @@ namespace Yrin {
         return 0;
     }
 
-    int op_push_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHi}\n");
-        int i = *reinterpret_cast<int *>(vm.next(sizeof(int)));
+    template<typename T>
+    int op_push(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(T).name());
+        T i = *reinterpret_cast<T *>(vm.next(sizeof(T)));
         vm.push(i);
         return 0;
     }
 
-    int op_push_f(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHf}\n");
-        float f = *reinterpret_cast<float *>(vm.next(sizeof(float)));
-        vm.push(f);
-        return 0;
-    }
-
-    int op_push_d(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHd}\n");
-        double d = *reinterpret_cast<double *>(vm.next(sizeof(double)));
-        vm.push(d);
-        return 0;
-    }
-
     int op_push_b0(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHb0}\n");
+        EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(false).name());
         vm.push(false);
         return 0;
     }
 
     int op_push_b1(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHb1}\n");
-        vm.push(false);
-        return 0;
-    }
-
-    int op_push_c(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{PUSHc}\n");
-        char c = *reinterpret_cast<char *>(vm.next(sizeof(char)));
-        vm.push(c);
+        EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(true).name());
+        vm.push(true);
         return 0;
     }
 
@@ -82,74 +62,48 @@ namespace Yrin {
         return 0;
     }
 
-    int op_add_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{ADDi}\n");
+    template<typename T1, typename T2>
+    int op_add(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{ADD} %s + %s\n", typeid(T1).name(), typeid(T2).name());
+        T1 op1 = *reinterpret_cast<T1 *>(vm.pop());
+        T2 op2 = *reinterpret_cast<T2 *>(vm.pop());
+        vm.push(op1 + op2);
         return 0;
     }
 
-    int op_add_f(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{ADDf}\n");
-        float f1 = *reinterpret_cast<float*>(vm.pop());
-        float f2 = *reinterpret_cast<float*>(vm.pop());
-        vm.push(f1 + f2);
+    template<typename T1, typename T2>
+    int op_sub(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{SUB} %s - %s\n", typeid(T1).name(), typeid(T2).name());
+        T1 op1 = *reinterpret_cast<T1 *>(vm.pop());
+        T2 op2 = *reinterpret_cast<T2 *>(vm.pop());
+        vm.push(op1 - op2);
         return 0;
     }
 
-    int op_add_d(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{ADDd}\n");
+    template<typename T1, typename T2>
+    int op_mul(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{MUL} %s * %s\n", typeid(T1).name(), typeid(T2).name());
+        T1 op1 = *reinterpret_cast<T1 *>(vm.pop());
+        T2 op2 = *reinterpret_cast<T2 *>(vm.pop());
+        vm.push(op1 * op2);
         return 0;
     }
 
-    int op_sub_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{SUBi}\n");
-        int i1 = *reinterpret_cast<int*>(vm.pop());
-        int i2 = *reinterpret_cast<int*>(vm.pop());
-        vm.push(i1 + i2);
+    template<typename T1, typename T2>
+    int op_div(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{DIV} %s / %s\n", typeid(T1).name(), typeid(T2).name());
+        T1 op1 = *reinterpret_cast<T1 *>(vm.pop());
+        T2 op2 = *reinterpret_cast<T2 *>(vm.pop());
+        vm.push(op1 / op2);
         return 0;
     }
 
-    int op_sub_f(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{SUBf}\n");
-        return 0;
-    }
-
-    int op_sub_d(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{SUBd}\n");
-        return 0;
-    }
-
-    int op_mul_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{MULi}\n");
-        return 0;
-    }
-
-    int op_mul_f(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{MULf}\n");
-        return 0;
-    }
-
-    int op_mul_d(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{MULd}\n");
-        return 0;
-    }
-
-    int op_div_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{DIVi}\n");
-        return 0;
-    }
-
-    int op_div_f(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{DIVf}\n");
-        return 0;
-    }
-
-    int op_div_d(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{DIVd}\n");
-        return 0;
-    }
-
-    int op_mod_i(Yrin::VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{MODi}\n");
+    template<typename T1, typename T2>
+    int op_mod(Yrin::VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{MOD} %s % %s\n", typeid(T1).name(), typeid(T2).name());
+        T1 op1 = *reinterpret_cast<T1 *>(vm.pop());
+        T2 op2 = *reinterpret_cast<T2 *>(vm.pop());
+        vm.push(op1 % op2);
         return 0;
     }
 
@@ -159,31 +113,38 @@ namespace Yrin {
         // Specials
         t[0] = op_reserved;
         t[1] = op_return;
+
         // Push, Pop, Load, Store
-        t[11] = op_push_i;
-        t[12] = op_push_f;
-        t[13] = op_push_d;
-        t[14] = op_push_b0;
-        t[15] = op_push_b1;
-        t[16] = op_push_c;
-        t[17] = op_push_s;
+        t[11] = op_push<int>;
+        t[12] = op_push<long long>;
+        t[13] = op_push<float>;
+        t[14] = op_push<double>;
+        t[15] = op_push_b0;
+        t[16] = op_push_b1;
+        t[17] = op_push<char>;
+        t[18] = op_push_s;
         t[20] = op_pop;
         t[21] = op_load;
         t[22] = op_store;
+
         // Arithmetic (Add, Sub, Mul, Div, Mod)
-        t[30] = op_add_i;
-        t[31] = op_add_f;
-        t[32] = op_add_d;
-        t[33] = op_sub_i;
-        t[34] = op_sub_f;
-        t[35] = op_sub_d;
-        t[36] = op_mul_i;
-        t[37] = op_mul_f;
-        t[38] = op_mul_d;
-        t[39] = op_div_i;
-        t[40] = op_div_f;
-        t[41] = op_div_d;
-        t[42] = op_mod_i;
+        t[30] = op_add<int, int>;
+        t[31] = op_add<long long, long long>;
+        t[32] = op_add<float, float>;
+        t[33] = op_add<double, double>;
+        t[34] = op_sub<int, int>;
+        t[35] = op_sub<long long, long long>;
+        t[36] = op_sub<float, float>;
+        t[37] = op_sub<double, double>;
+        t[38] = op_mul<int, int>;
+        t[39] = op_mul<long long, long long>;
+        t[40] = op_mul<float, float>;
+        t[41] = op_mul<double, double>;
+        t[42] = op_div<int, int>;
+        t[43] = op_div<long long, long long>;
+        t[44] = op_div<float, float>;
+        t[45] = op_div<double, double>;
+        t[46] = op_mod<int, int>;
     }
 
 } // Yrin

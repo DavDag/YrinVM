@@ -1,4 +1,5 @@
 #include "yrin_vm.hpp"
+#include <typeinfo>
 
 namespace Yrin {
 

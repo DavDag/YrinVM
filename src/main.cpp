@@ -26,5 +26,6 @@ int main(int argc, char **argv) {
     } catch (std::exception &exception) {
         ERROR_LOG("Unexpected exception thrown.\n%s\n", exception.what());
     }
+
     return 0;
 }

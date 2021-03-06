@@ -10,3 +10,5 @@
 /venv/
 *.exe
 *.dll
+*.ilk
+*.pdb

@@ -9,30 +9,86 @@
 
 namespace Yrin::Memory {
 
+    // TODO: Organize into proper class and make it dynamic
+    // Type ids
+    namespace TypeId {
+        constexpr int Undefined = 0;
+        constexpr int Integer = 1;
+        constexpr int LongLong = 2;
+        constexpr int Floating = 3;
+        constexpr int Double = 4;
+        constexpr int Boolean = 5;
+        constexpr int Character = 6;
+    }
+
     // Custom memory management
     class StackMemory {
     public:
-        struct Element {
+        // Define a struct which contains element type data
+        struct ElementType {
+            size_t size = 0;
+        };
+
+        // Define a struct which contains element value
+        union ElementValue {
+            int i;
+            long long ll;
+            float f;
+            double d;
+            bool b;
+            char c;
             void *ptr;
-            int size;
+        };
+
+        // Represent an element in memory
+        struct Element {
+            // Type index
+            int type;
+            // Data
+            ElementValue value;
+            // Default constructor
+            Element(): value{.i = 0}, type(TypeId::Undefined) {}
+            // Convenience constructors
+            explicit Element(int i) : value{.i = i}, type(TypeId::Integer) {}
+            explicit Element(long long ll) : value{.ll = ll}, type(TypeId::Integer) {}
+            explicit Element(float f) : value{.f = f}, type(TypeId::Integer) {}
+            explicit Element(double d) : value{.d = d}, type(TypeId::Integer) {}
+            explicit Element(bool b) : value{.b = b}, type(TypeId::Integer) {}
+            explicit Element(char c) : value{.c = c}, type(TypeId::Integer) {}
+            explicit Element(void *ptr, int type) : value{.ptr = ptr}, type(type) {}
+            // Convenience function to retrieve data
             template<typename T>
-            inline T* data() noexcept { return reinterpret_cast<T*>(ptr); }
+            [[nodiscard]] inline T &data() const noexcept { return *((T*)&value); } // TODO: Si può fare meglio ?
+            // Convenience function to retrieve element data size
+            [[nodiscard]] inline size_t size() const noexcept { return TypeTable[type].size; }
         };
 
     private:
-        int _index = 0;
-        BYTE _memory[1024] = {0};
-        std::vector<int> _data = {0};
+        // Types table
+        static ElementType TypeTable[256];
+
+        // Memory load index
+        int memoryIndex = 0;
+
+        // TODO: dynamic memory
+        // Memory
+        Element memory[1024];
 
     public:
+        // Initialize types table
+        static void init_table() noexcept;
+
         // Push element into Memory
-        void push(void *, size_t) noexcept;
+        template<typename T>
+        inline void push(T t) noexcept { memory[memoryIndex++] = Element(t); }
+        inline void push(void *ptr, int type) noexcept { memory[memoryIndex++] = Element(ptr, type); }
+        inline void push(const Element &e) noexcept { memory[memoryIndex++] = e; }
 
         // Pop element from Memory
-        const Element& pop() noexcept;
+        inline const Element &pop() noexcept { return memory[--memoryIndex]; }
 
         // Get element from Memory at index (from stack's head)
-        const Element& get(int) noexcept;
+        inline const Element &get(int index) noexcept { return memory[memoryIndex - index - 1]; }
     };
 
 } // Yrin

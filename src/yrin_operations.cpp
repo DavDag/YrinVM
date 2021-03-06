@@ -67,8 +67,8 @@ namespace Yrin {
     template<typename T1, typename T2>
     int op_add(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{ADD} %s + %s\n", typeid(T1).name(), typeid(T2).name());
-        T1& op1 = *vm.pop().data<T1>();
-        T2& op2 = *vm.pop().data<T2>();
+        T1 op1 = vm.pop<T1>();
+        T2 op2 = vm.pop<T2>();
         vm.push(op1 + op2);
         return 0;
     }
@@ -76,8 +76,8 @@ namespace Yrin {
     template<typename T1, typename T2>
     int op_sub(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{SUB} %s - %s\n", typeid(T1).name(), typeid(T2).name());
-        T1& op1 = *vm.pop().data<T1>();
-        T2& op2 = *vm.pop().data<T2>();
+        T1 op1 = vm.pop<T1>();
+        T2 op2 = vm.pop<T2>();
         vm.push(op1 - op2);
         return 0;
     }
@@ -85,8 +85,8 @@ namespace Yrin {
     template<typename T1, typename T2>
     int op_mul(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{MUL} %s * %s\n", typeid(T1).name(), typeid(T2).name());
-        T1& op1 = *vm.pop().data<T1>();
-        T2& op2 = *vm.pop().data<T2>();
+        T1 op1 = vm.pop<T1>();
+        T2 op2 = vm.pop<T2>();
         vm.push(op1 * op2);
         return 0;
     }
@@ -94,8 +94,8 @@ namespace Yrin {
     template<typename T1, typename T2>
     int op_div(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{DIV} %s / %s\n", typeid(T1).name(), typeid(T2).name());
-        T1& op1 = *vm.pop().data<T1>();
-        T2& op2 = *vm.pop().data<T2>();
+        T1 op1 = vm.pop<T1>();
+        T2 op2 = vm.pop<T2>();
         vm.push(op1 / op2);
         return 0;
     }
@@ -103,8 +103,8 @@ namespace Yrin {
     template<typename T1, typename T2>
     int op_mod(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{MOD} %s %% %s\n", typeid(T1).name(), typeid(T2).name());
-        T1& op1 = *vm.pop().data<T1>();
-        T2& op2 = *vm.pop().data<T2>();
+        T1 op1 = vm.pop<T1>();
+        T2 op2 = vm.pop<T2>();
         vm.push(op1 % op2);
         return 0;
     }

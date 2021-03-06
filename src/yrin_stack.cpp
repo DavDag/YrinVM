@@ -2,51 +2,16 @@
 
 namespace Yrin {
 
-    void Memory::StackMemory::push(void *data, size_t size) noexcept {
-        // Copy data into memory
-        memcpy(&_memory[_index], data, size);
+    Memory::StackMemory::ElementType Memory::StackMemory::TypeTable[256] = {0};
 
-        // Increment index
-        _index += size;
-
-        // Save index
-        _data.push_back(_index);
-    }
-
-    const Memory::StackMemory::Element &Memory::StackMemory::pop() noexcept {
-        static StackMemory::Element element{.ptr = nullptr, .size = 0};
-
-        // Calc top element begin index in memory (s)
-        int &s = _data[_data.size() - 2];
-
-        // Calc top element end index in memory (e)
-        int &e = _data[_data.size() - 1];
-
-        // Decrement index
-        _index -= (e - s);
-
-        // Delete saved index
-        _data.pop_back();
-
-        // Return element
-        element.ptr = &_memory[_index];
-        element.size = (e - s);
-        return element;
-    }
-
-    const Memory::StackMemory::Element &Memory::StackMemory::get(int index) noexcept {
-        static StackMemory::Element element{.ptr = nullptr, .size = 0};
-
-        // Calc element begin index in memory (s)
-        int &s = _data[_data.size() - index - 2];
-
-        // Calc element end index in memory (e)
-        int &e = _data[_data.size() - index - 1];
-
-        // Return element
-        element.ptr = &_memory[s];
-        element.size = (e - s);
-        return element;
+    void Memory::StackMemory::init_table() noexcept {
+        TypeTable[TypeId::Undefined].size = 0;
+        TypeTable[TypeId::Integer].size = sizeof(int);
+        TypeTable[TypeId::LongLong].size = sizeof(long long);
+        TypeTable[TypeId::Floating].size = sizeof(float);
+        TypeTable[TypeId::Double].size = sizeof(double);
+        TypeTable[TypeId::Boolean].size = sizeof(bool);
+        TypeTable[TypeId::Character].size = sizeof(char);
     }
 
 } // Yrin

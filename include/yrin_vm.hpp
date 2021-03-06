@@ -24,9 +24,6 @@ namespace Yrin {
         Memory::StackMemory rntStack;
         Memory::StackMemory dataStack;
 
-        // Push data into RuntimeStack
-        inline void _push(void *data, size_t size) noexcept { rntStack.push(data, size); }
-
     public:
         // Initialize operations table
         static void init_table() noexcept;
@@ -44,27 +41,26 @@ namespace Yrin {
         BYTE *next(size_t) noexcept;
 
         // Push data into RuntimeStack
-        template<typename T>
-        inline void push(T t) noexcept {
-            _push(&t, sizeof(T));
-        }
+        inline void push(int i) noexcept { rntStack.push(i); }
+        inline void push(long long ll) noexcept { rntStack.push(ll); }
+        inline void push(float f) noexcept { rntStack.push(f); }
+        inline void push(double d) noexcept { rntStack.push(d); }
+        inline void push(char c) noexcept { rntStack.push(c); }
+        inline void push(bool b) noexcept { rntStack.push(b); }
+        inline void push(void* ptr, int type) noexcept { rntStack.push(ptr, type); }
 
         // Retrieve data from RuntimeStack
-        inline Memory::StackMemory::Element pop() noexcept {
-            return rntStack.pop();
-        }
+        template<typename T>
+        inline int pop() noexcept { return rntStack.pop().data<T>(); }
+
+        // Remove data from RuntimeStack
+        inline void pop() noexcept { rntStack.pop(); }
 
         // Push data into DataStack
-        inline void store() noexcept {
-            const auto &e = rntStack.pop();
-            dataStack.push(e.ptr, e.size);
-        }
+        inline void store() noexcept { dataStack.push(rntStack.pop()); }
 
         // Retrieve data from DataStack
-        inline void load(int index) noexcept {
-            const auto &e = dataStack.get(index);
-            rntStack.push(e.ptr, e.size);
-        }
+        inline void load(int index) noexcept { rntStack.push(dataStack.get(index)); }
     };
 
 } // Yrin

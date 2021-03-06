@@ -17,10 +17,15 @@ int main(int argc, char **argv) {
 
     // Run VM
     try {
+        // Data initialization
+        Yrin::Memory::StackMemory::init_table();
         Yrin::VM::init_table();
+
+        // VM
         Yrin::VM vm;
         vm.read(filePath);
         vm.run();
+
     } catch (Yrin::Error::YvmException &exception) {
         ERROR_LOG("VM crashed. Error code %d\n", exception.errorCode);
     } catch (std::exception &exception) {

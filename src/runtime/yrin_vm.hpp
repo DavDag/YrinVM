@@ -7,6 +7,7 @@
 #include <stack>
 #include "../common/yrin_defs.hpp"
 #include "yrin_datatypes.hpp"
+#include "yrin_stack.hpp"
 
 namespace Yrin {
 
@@ -22,18 +23,12 @@ namespace Yrin {
         // Table of operations
         static op_callback OpTable[256];
 
-        // TODO: Create custom stacks
-        // Runtime stack
-        int rntstack_load_index = 0;
-        BYTE rntstack[1024];
-        std::vector<int> rs_offsets; // include type flag inside to dump
-        // Data stack
-        int datastack_load_index = 0;
-        BYTE datastack[1024];
-        std::vector<int> ds_indexes = {0}; // include type flag inside to dump
+        // Stacks
+        Memory::StackMemory rntStack;
+        Memory::StackMemory dataStack;
 
         // Push data into RuntimeStack
-        void _push(void *, size_t) noexcept;
+        inline void _push(void *data, size_t size) noexcept { rntStack.push(data, size); }
 
     public:
         // Initialize operations table
@@ -52,21 +47,27 @@ namespace Yrin {
         BYTE *next(size_t) noexcept;
 
         // Push data into RuntimeStack
-        inline void push(int i) noexcept { _push(reinterpret_cast<void *>(&i), sizeof(int)); }
-        inline void push(long long l) noexcept { _push(reinterpret_cast<void *>(&l), sizeof(long long)); }
-        inline void push(bool b) noexcept { _push(reinterpret_cast<void *>(&b), sizeof(bool)); }
-        inline void push(float f) noexcept { _push(reinterpret_cast<void *>(&f), sizeof(float)); }
-        inline void push(double d) noexcept { _push(reinterpret_cast<void *>(&d), sizeof(double)); }
-        inline void push(char c) noexcept { _push(reinterpret_cast<void *>(&c), sizeof(char)); }
+        template<typename T>
+        inline void push(T t) noexcept {
+            _push(&t, sizeof(T));
+        }
 
         // Retrieve data from RuntimeStack
-        void *pop() noexcept;
+        inline Memory::StackMemory::Element pop() noexcept {
+            return rntStack.pop();
+        }
 
         // Push data into DataStack
-        void store() noexcept;
+        inline void store() noexcept {
+            const auto &e = rntStack.pop();
+            dataStack.push(e.ptr, e.size);
+        }
 
         // Retrieve data from DataStack
-        void load(int) noexcept;
+        inline void load(int index) noexcept {
+            const auto &e = dataStack.get(index);
+            rntStack.push(e.ptr, e.size);
+        }
     };
 
 } // Yrin

@@ -30,6 +30,6 @@ ELSE ()
     ADD_EXECUTABLE(YrinVM src/main.cpp ${SOURCE})
 ENDIF ()
 
+INCLUDE_DIRECTORIES(vendor/asio_1_18_1/include)
 ADD_EXECUTABLE(YrinVM_server server/main_server.cpp ${SOURCE})
-
 ADD_EXECUTABLE(YrinVM_client server/main_client.cpp)

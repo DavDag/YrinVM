@@ -1,4 +1,5 @@
 #include "yvm.hpp"
+#include "yrin_server.hpp"
 
 inline void log_yvm_server_usage() noexcept {
     LOG("Usage:\n");
@@ -8,6 +9,30 @@ inline void log_yvm_server_usage() noexcept {
 
 inline void log_port_error() noexcept {
     LOG("Port number must be greater than 1024.\n");
+}
+
+void Yrin::VM::run_server(int port) {
+    try {
+        // Asio server setup
+        Yrin::Server::TcpServer server(port);
+        server.run();
+
+        // Main loop
+        std::mutex mutex;
+        std::unique_lock lock(mutex);
+        server.getCV().wait(lock, [&server]() { return server.isClientConnected(); });
+        while (!ips.empty()) {
+            const BYTE &instruction = code[ips.top()++];
+            OpTable[instruction](*this);
+        }
+
+        // Close server gracefully
+        server.closeAndJoin();
+    } catch (Yrin::Error::YvmException &exception) {
+        ERROR_LOG("VM crashed. Error code %d\n", exception.errorCode);
+    } catch (std::exception &exception) {
+        ERROR_LOG("Unexpected exception thrown.\n%s\n", exception.what());
+    }
 }
 
 int main(int argc, char **argv) {

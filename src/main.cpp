@@ -1,8 +1,8 @@
-#include "../include/yvm.hpp"
+#include "yvm.hpp"
 
-inline void log_yvm_usage() noexcept {
+inline void log_yvm_server_usage() noexcept {
     LOG("Usage:\n");
-    LOG("\t<path> to run program\n");
+    LOG("\t<path>: [REQUIRED] to run program\n");
 }
 
 int main(int argc, char **argv) {
@@ -11,26 +11,17 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         filePath = argv[1];
     } else {
-        log_yvm_usage();
+        log_yvm_server_usage();
         return 0;
     }
 
-    // Run VM
-    try {
-        // Data initialization
-        Yrin::Memory::StackMemory::init_table();
-        Yrin::VM::init_table();
+    // Data initialization
+    Yrin::Memory::StackMemory::init_table();
+    Yrin::VM::init_table();
 
-        // VM
-        Yrin::VM vm;
-        vm.read(filePath);
-        vm.run();
-
-    } catch (Yrin::Error::YvmException &exception) {
-        ERROR_LOG("VM crashed. Error code %d\n", exception.errorCode);
-    } catch (std::exception &exception) {
-        ERROR_LOG("Unexpected exception thrown.\n%s\n", exception.what());
-    }
-
+    // VM
+    Yrin::VM vm;
+    vm.read(filePath);
+    vm.run();
     return 0;
 }

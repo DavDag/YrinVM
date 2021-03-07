@@ -31,3 +31,5 @@ ELSE ()
 ENDIF ()
 
 ADD_EXECUTABLE(YrinVM_server server/main_server.cpp ${SOURCE})
+
+ADD_EXECUTABLE(YrinVM_client server/main_client.cpp)

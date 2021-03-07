@@ -27,7 +27,12 @@ namespace Yrin::Meta {
     };
 
     // Current YVM version
-    constexpr Version CURRENT_VERSION = {'0', '1', 'b', '1'};
+    constexpr Version CURRENT_VERSION = {
+        .major = CURRENT_YVM_VERSION_MAJOR,
+        .minor = CURRENT_YVM_VERSION_MINOR,
+        .type = CURRENT_YVM_VERSION_RTYPE,
+        .release = CURRENT_YVM_VERSION_COUNT
+    };
 
 } // Yrin::Meta
 

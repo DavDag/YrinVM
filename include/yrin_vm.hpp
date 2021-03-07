@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <stack>
+#include "yrin_datatypes.hpp"
+#include "yrin_stack.hpp"
 
 namespace Yrin {
 
@@ -33,6 +35,7 @@ namespace Yrin {
 
         // Run VM
         void run();
+        void run_server(int);
 
         // Return from function call
         void ret() noexcept;

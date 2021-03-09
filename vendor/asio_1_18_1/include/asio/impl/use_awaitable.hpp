@@ -230,13 +230,13 @@ public:
 
 #if defined(_MSC_VER)
 template <typename T>
-T dummy_return()
+inline T dummy_return()
 {
   return std::move(*static_cast<T*>(nullptr));
 }
 
 template <>
-void dummy_return()
+inline void dummy_return()
 {
 }
 #endif // defined(_MSC_VER)

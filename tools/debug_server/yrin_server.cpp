@@ -73,8 +73,10 @@ namespace Yrin::Server {
         std::scoped_lock lock(_mutex);
 
         // Close socket
-        if (_socket.is_open()) _socket.close();
-        LOG("Connection closed.\n");
+        if (_socket.is_open()) {
+            LOG("Connection closed.\n");
+            _socket.close();
+        }
     }
 
     TcpServer::TcpServer(int port) :
@@ -88,6 +90,8 @@ namespace Yrin::Server {
 
         // Run on its own thread
         _tContext = std::thread([this]() { _context.run(); });
+
+        // TODO: Safe closing method
     }
 
     void TcpServer::closeAndJoin() {
@@ -224,7 +228,7 @@ namespace Yrin::Server {
                                        _cVar.notify_one();
                                    } else {
                                        // TODO: May try to accept another request ?
-                                       LOG("Error accepting client. Error code = %s\n", ec.message().c_str());
+                                       ERROR_LOG("Error accepting client. Error code = %s\n", ec.message().c_str());
                                    }
                                });
     }

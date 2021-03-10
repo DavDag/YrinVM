@@ -8,16 +8,26 @@ Yrin::DebugVm::Client::Client(int port) : netClient(*(new Yrin::Network::TcpClie
 void Yrin::DebugVm::Client::run() {
     setup();
 
+    // Wait for client
     std::mutex mutex;
     std::unique_lock lock(mutex);
     netClient.getCV().wait(lock, [&]() { return netClient.canConsoleStart(); });
 
+    // Retrieve data and run console
+    netClient.getCV().wait(lock, [&]() { return netClient.hasReceivedData(); });
+    const std::vector<BYTE>& bytestream = netClient.getData();
+
     // Terminate client
-    netClient.close();
+    close();
 }
+
 void Yrin::DebugVm::Client::setup() {
     // ASIO client setup
     netClient.start();
 
     // Console setup
+}
+
+void Yrin::DebugVm::Client::close() {
+    netClient.closeAndJoin();
 }

@@ -27,6 +27,7 @@ namespace Yrin::DebugVm {
         explicit Client(int port);
 
         void run();
+        void close();
     };
 
 } // Yrin::Client

@@ -27,18 +27,25 @@ namespace Yrin::Network {
         std::thread _tContext;
         asio::ip::tcp::socket _socket;
         asio::ip::tcp::endpoint _endpoint;
+        std::mutex _mutex;
 
         // Thread synchronization
         bool _canStart = false;
         std::condition_variable _cVar;
 
+        // Data received
+        std::vector<BYTE> _bytestream;
+
     public:
         explicit TcpClient(int port);
 
         void start();
-        void close();
+        void closeAndJoin();
+
+        [[nodiscard]] std::vector<BYTE> getData() const noexcept { return _bytestream; }
 
         [[nodiscard]] bool canConsoleStart() const noexcept { return _canStart; }
+        [[nodiscard]] bool hasReceivedData() const noexcept { return !_bytestream.empty(); }
         [[nodiscard]] std::condition_variable &getCV() noexcept { return _cVar; }
     };
 

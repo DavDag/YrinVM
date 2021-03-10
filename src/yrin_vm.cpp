@@ -5,10 +5,15 @@ namespace Yrin {
     void VM::run() {
         // TODO: error handling from operations
         try {
+            EXECUTOR_DEBUG_LOG("=================================\n"
+                               "||          EXECUTOR           ||\n"
+                               "=================================\n");
             // Main loop
             while (!ips.empty()) {
-                const BYTE& instruction = code[ips.top()++];
+                int& instruction_index = ips.top();
+                const BYTE &instruction = bytestream[code[instruction_index]];
                 OpTable[instruction](*this);
+                ++instruction_index;
             }
         } catch (Yrin::Error::YvmException &exception) {
             ERROR_LOG("VM crashed. Error code %d\n", exception.errorCode);
@@ -22,10 +27,11 @@ namespace Yrin {
         ips.pop();
     }
 
-    BYTE *VM::next(size_t size) noexcept {
+    BYTE *VM::next(int &offset, size_t size) noexcept {
         // TODO: error check
-        BYTE *ptr = &code[ips.top()];
-        ips.top() += size;
+        int ind = code[ips.top()] + 1; // shifted by 1 (opcode)
+        BYTE *ptr = &bytestream[ind + offset];
+        offset += size;
         return ptr;
     }
 

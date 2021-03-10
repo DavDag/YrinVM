@@ -4,13 +4,17 @@
 
 namespace Yrin {
 
-    int op_reserved(VM &vm) noexcept {
-        EXECUTOR_DEBUG_LOG("{RESERVED}\n");
-        return 0;
-    }
+    // ==============================
+    // ||      Vm Operations       ||
+    // ==============================
 
     int op_error(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{ERROR}\n");
+        return 0;
+    }
+
+    int op_reserved(VM &vm) noexcept {
+        EXECUTOR_DEBUG_LOG("{RESERVED}\n");
         return 0;
     }
 
@@ -23,7 +27,8 @@ namespace Yrin {
     template<typename T>
     int op_push(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{PUSH} %s\n", typeid(T).name());
-        T i = *reinterpret_cast<T *>(vm.next(sizeof(T)));
+        int ind = 0;
+        T i = *reinterpret_cast<T *>(vm.next(ind, sizeof(T)));
         vm.push(i);
         return 0;
     }
@@ -53,7 +58,8 @@ namespace Yrin {
 
     int op_load(VM &vm) noexcept {
         EXECUTOR_DEBUG_LOG("{LOAD}\n");
-        int i = *reinterpret_cast<int *>(vm.next(2 * sizeof(BYTE))) & 0x0000ffff;
+        int ind = 0;
+        int i = *reinterpret_cast<int *>(vm.next(ind, 2 * sizeof(BYTE))) & 0x0000ffff;
         vm.load(i);
         return 0;
     }
@@ -111,42 +117,42 @@ namespace Yrin {
 
     op_callback VM::OpTable[256] = {op_error};
     void VM::init_table() noexcept {
-        auto &t = VM::OpTable;
+        auto &t1 = VM::OpTable;
         // Specials
-        t[0] = op_reserved;
-        t[1] = op_return;
+        t1[OP_RESERVED_CODE] = op_reserved;
+        t1[OP_RETURN_CODE] = op_return;
 
         // Push, Pop, Load, Store
-        t[11] = op_push<int>;
-        t[12] = op_push<long long>;
-        t[13] = op_push<float>;
-        t[14] = op_push<double>;
-        t[15] = op_push_b0;
-        t[16] = op_push_b1;
-        t[17] = op_push<char>;
-        t[18] = op_push_s;
-        t[20] = op_pop;
-        t[21] = op_load;
-        t[22] = op_store;
+        t1[OP_PUSH_I_CODE] = op_push<int>;
+        t1[OP_PUSH_L_CODE] = op_push<long long>;
+        t1[OP_PUSH_F_CODE] = op_push<float>;
+        t1[OP_PUSH_D_CODE] = op_push<double>;
+        t1[OP_PUSH_B0_CODE] = op_push_b0;
+        t1[OP_PUSH_B1_CODE] = op_push_b1;
+        t1[OP_PUSH_C_CODE] = op_push<char>;
+        t1[OP_PUSH_S_CODE] = op_push_s;
+        t1[OP_POP_CODE] = op_pop;
+        t1[OP_LOAD_CODE] = op_load;
+        t1[OP_STORE_CODE] = op_store;
 
         // Arithmetic (Add, Sub, Mul, Div, Mod)
-        t[30] = op_add<int, int>;
-        t[31] = op_add<long long, long long>;
-        t[32] = op_add<float, float>;
-        t[33] = op_add<double, double>;
-        t[34] = op_sub<int, int>;
-        t[35] = op_sub<long long, long long>;
-        t[36] = op_sub<float, float>;
-        t[37] = op_sub<double, double>;
-        t[38] = op_mul<int, int>;
-        t[39] = op_mul<long long, long long>;
-        t[40] = op_mul<float, float>;
-        t[41] = op_mul<double, double>;
-        t[42] = op_div<int, int>;
-        t[43] = op_div<long long, long long>;
-        t[44] = op_div<float, float>;
-        t[45] = op_div<double, double>;
-        t[46] = op_mod<int, int>;
+        t1[OP_ADD_I_CODE] = op_add<int, int>;
+        t1[OP_ADD_L_CODE] = op_add<long long, long long>;
+        t1[OP_ADD_F_CODE] = op_add<float, float>;
+        t1[OP_ADD_D_CODE] = op_add<double, double>;
+        t1[OP_SUB_I_CODE] = op_sub<int, int>;
+        t1[OP_SUB_L_CODE] = op_sub<long long, long long>;
+        t1[OP_SUB_F_CODE] = op_sub<float, float>;
+        t1[OP_SUB_D_CODE] = op_sub<double, double>;
+        t1[OP_MUL_I_CODE] = op_mul<int, int>;
+        t1[OP_MUL_L_CODE] = op_mul<long long, long long>;
+        t1[OP_MUL_F_CODE] = op_mul<float, float>;
+        t1[OP_MUL_D_CODE] = op_mul<double, double>;
+        t1[OP_DIV_I_CODE] = op_div<int, int>;
+        t1[OP_DIV_F_CODE] = op_div<long long, long long>;
+        t1[OP_DIV_L_CODE] = op_div<float, float>;
+        t1[OP_DIV_D_CODE] = op_div<double, double>;
+        t1[OP_MOD_I_CODE] = op_mod<int, int>;
     }
 
 } // Yrin

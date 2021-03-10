@@ -13,6 +13,9 @@ inline void log_port_error() noexcept {
 
 void Yrin::VM::run_server(int port) {
     try {
+        EXECUTOR_DEBUG_LOG("=================================\n"
+                           "||         SERVER & VM         ||\n"
+                           "=================================\n");
         // Server setup
         Yrin::Server::TcpServer server(port);
         server.run();
@@ -23,8 +26,9 @@ void Yrin::VM::run_server(int port) {
 
         // Execute instruction at index
         auto execInstruction = [&](int &index) {
-            const BYTE &instruction = code[index++];
+            const BYTE &instruction = bytestream[code[index]];
             OpTable[instruction](*this);
+            ++index;
         };
 
         int instructionIndexToStop = -1; // -1 To never stop

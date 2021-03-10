@@ -3,7 +3,6 @@
 #ifndef YRINVM_YRIN_VM_HPP
 #define YRINVM_YRIN_VM_HPP
 
-#include <vector>
 #include <stack>
 #include "yrin_datatypes.hpp"
 #include "yrin_stack.hpp"
@@ -14,7 +13,8 @@ namespace Yrin {
     class VM {
     private:
         // VM code to run
-        std::vector<BYTE> code;
+        std::vector<BYTE> bytestream;
+        std::vector<int> code;
 
         // IP stack
         std::stack<int> ips;
@@ -40,13 +40,13 @@ namespace Yrin {
         // Return from function call
         void ret() noexcept;
 
-        // Retrieve BYTEs from code
-        BYTE *next(size_t) noexcept;
+        // Retrieve BYTEs from bytestream. Keep track with offset
+        BYTE *next(int &, size_t) noexcept;
 
         // Push data into RuntimeStack
         template<typename T>
         inline void push(T t) noexcept { rntStack.push(t); }
-        inline void push(void* ptr, int type) noexcept { rntStack.push(ptr, type); }
+        inline void push(void *ptr, int type) noexcept { rntStack.push(ptr, type); }
 
         // Retrieve data from RuntimeStack
         template<typename T>

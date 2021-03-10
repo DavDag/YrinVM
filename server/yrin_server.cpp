@@ -20,8 +20,8 @@ namespace Yrin::Server {
         // Instruction string
         static const std::string welcomeStr = "Connected to remove YVM debugger. Available commands are:\r\n"
                                               "-\"run\" (or \"r\") to start the VM execution\r\n"
-                                              "-\"add break\" (or \"ab\") <instruction index> to set a breakpoint\r\n"
-                                              "-\"rem break\" (or \"rb\") <instruction index> to remove a breakpoint\r\n"
+                                              "-\"add breakpoint\" (or \"ab\") <instruction index> to add a breakpoint\r\n"
+                                              "-\"rem breakpoint\" (or \"rb\") <instruction index> to remove a breakpoint\r\n"
                                               "-\"continue\" (or \"c\") to continue execution when the VM is paused\r\n"
                                               "-\"step into\" (or \"si\") to progress by only an instruction\r\n"
                                               "-\"step over\" (or \"so\") to progress \"over\" an instruction (ex. over function calls)\r\n";
@@ -108,8 +108,11 @@ namespace Yrin::Server {
          *  - continue (or \"c\")
          *  - step into (or \"si\")
          *  - step over (or \"so\")
+         *
+         *  // TODO: add -query
          */
         auto CmdRun = [&]() {
+            if (_vmCanRun) return;
             DEBUG_LOG("Command \"RUN\" received.\n");
             applyDebugVarsChanges();
             _vmCanRun = true;

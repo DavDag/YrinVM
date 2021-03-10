@@ -1,10 +1,10 @@
 #include "yvm.hpp"
-#include "yrin_server.hpp"
+#include "src/yrin_server.hpp"
 
 inline void log_yvm_server_usage() noexcept {
     LOG("Usage:\n");
     LOG("\t<path>: [REQUIRED] to run program\n");
-    LOG("\t-p <port>: [OPTIONAL] to change server port\n");
+    LOG("\t-p <port>: [OPTIONAL] to change tools port\n");
 }
 
 inline void log_port_error() noexcept {
@@ -46,7 +46,7 @@ void Yrin::VM::run_server(int port) {
             } else {
                 DEBUG_LOG("IP: %d, IP to STOP: %d\n\n", instructionIndex, instructionIndexToStop);
 
-                // Wait for cmd from server
+                // Wait for cmd from tools
                 server.getCV().wait(lock, [&server]() { return server.canVmContinue(); });
 
                 // Execute command
@@ -81,7 +81,7 @@ void Yrin::VM::run_server(int port) {
             }
         }
 
-        // Close server gracefully
+        // Close tools gracefully
         server.closeAndJoin();
     } catch (Yrin::Error::YvmException &exception) {
         ERROR_LOG("VM crashed. Error code %d\n", exception.errorCode);

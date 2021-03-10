@@ -24,6 +24,13 @@ SET(SOURCE
         src/yrin_operations.cpp
         src/yrin_stack.cpp)
 
+SET(SERVER_SOURCE
+        tools/debug_server/src/yrin_server.cpp)
+
+SET(CLIENT_SOURCE
+        tools/debug_client/src/yrin_client.cpp
+        tools/debug_client/src/yrin_console_draw.hpp)
+
 IF (RUN_TESTS MATCHES ON)
     ADD_EXECUTABLE(YrinVM tests/main_tests.cpp ${SOURCE})
 ELSE ()
@@ -31,5 +38,5 @@ ELSE ()
 ENDIF ()
 
 INCLUDE_DIRECTORIES(vendor/asio_1_18_1/include)
-ADD_EXECUTABLE(YrinVM_server server/yrin_server.cpp server/main_server.cpp ${SOURCE})
-ADD_EXECUTABLE(YrinVM_client server/main_client.cpp)
+ADD_EXECUTABLE(YrinVM_server tools/debug_server/main_server.cpp ${SOURCE} ${SERVER_SOURCE})
+ADD_EXECUTABLE(YrinVM_client tools/debug_client/main_client.cpp ${SOURCE} ${CLIENT_SOURCE})

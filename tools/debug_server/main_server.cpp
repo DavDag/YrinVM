@@ -1,5 +1,5 @@
 #include "yvm.hpp"
-#include "src/yrin_server.hpp"
+#include "yrin_server.hpp"
 
 inline void log_yvm_server_usage() noexcept {
     LOG("Usage:\n");

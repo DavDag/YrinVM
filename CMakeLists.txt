@@ -25,11 +25,11 @@ SET(SOURCE
         src/yrin_stack.cpp)
 
 SET(SERVER_SOURCE
-        tools/debug_server/src/yrin_server.cpp)
+        tools/debug_server/yrin_server.cpp)
 
 SET(CLIENT_SOURCE
-        tools/debug_client/src/yrin_client.cpp
-        tools/debug_client/src/yrin_console_draw.hpp)
+        tools/network/yrin_net_client.cpp
+        tools/debug_client/yrin_client.cpp)
 
 IF (RUN_TESTS MATCHES ON)
     ADD_EXECUTABLE(YrinVM tests/main_tests.cpp ${SOURCE})

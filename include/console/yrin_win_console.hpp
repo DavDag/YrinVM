@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef YRINVM_YRIN_CONSOLE_DRAW_HPP
-#define YRINVM_YRIN_CONSOLE_DRAW_HPP
+#ifndef YRINVM_YRIN_WIN_CONSOLE_HPP
+#define YRINVM_YRIN_WIN_CONSOLE_HPP
 
 /*
 Table showing how ASCII characters are drawn on the screen
@@ -40,11 +40,53 @@ Table showing how ASCII characters are drawn on the screen
 */
 
 #define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
-#include <windows.h>
+#ifndef CONSOLE_SCREEN_WIDTH
+#define CONSOLE_SCREEN_WIDTH 80
+#endif // CONSOLE_SCREEN_WIDTH
+
+#ifndef CONSOLE_SCREEN_HEIGHT
+#define CONSOLE_SCREEN_HEIGHT 25
+#endif // CONSOLE_SCREEN_HEIGHT
+
+#define F_BLACK			0x00
+#define	F_BLUE			0x01
+#define	F_GREEN 		0x02
+#define F_AQUA			0x03
+#define	F_RED			0x04
+#define F_PURPLE		0x05
+#define F_YELLOW		0x06
+#define F_WHITE			0x07
+#define	F_GREY			0x08
+#define	F_LIGHTBLUE		0x09
+#define	F_LIGHTGREEN	0x0A
+#define	F_LIGHTAQUA		0x0B
+#define	F_LIGHTRED		0x0C
+#define	F_LIGHTPURPLE	0x0D
+#define	F_LIGHTYELLOW	0x0E
+#define	F_BRIGTHWHITE	0x0F
+
+#define B_BLACK			0x00
+#define	B_BLUE			0x10
+#define	B_GREEN 		0x20
+#define B_AQUA			0x30
+#define	B_RED			0x40
+#define B_PURPLE		0x50
+#define B_YELLOW		0x60
+#define B_WHITE			0x70
+#define	B_GREY			0x80
+#define	B_LIGHTBLUE		0x90
+#define	B_LIGHTGREEN	0xA0
+#define	B_LIGHTAQUA		0xB0
+#define	B_LIGHTRED		0xC0
+#define	B_LIGHTPURPLE	0xD0
+#define	B_LIGHTYELLOW	0xE0
+#define	B_BRIGTHWHITE	0xF0
 
 /*
  * Reference
+ *
  * https://github.com/DavDag/CppConsoleGameLibrary
  */
 
@@ -57,44 +99,91 @@ namespace Yrin::Console {
         HANDLE consoleOutput;
         COORD bufferSize{}, bufferCoord{};
         SMALL_RECT region{};
-        CHAR_INFO buffer{}
-        [SCREEN_HEIGHT][SCREEN_WIDTH];
+        CHAR_INFO buffer[CONSOLE_SCREEN_HEIGHT][CONSOLE_SCREEN_WIDTH]{};
 
     public:
+        /**
+         ** 	Console constructor.
+         **/
         ConsoleTool() {
             consoleOutput = (HANDLE) GetStdHandle(STD_OUTPUT_HANDLE);
-            bufferSize = {SCREEN_WIDTH, SCREEN_HEIGHT};
+            bufferSize = {CONSOLE_SCREEN_WIDTH, CONSOLE_SCREEN_HEIGHT};
             bufferCoord = {0, 0};
-            region = {0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1};
+            region = {0, 0, CONSOLE_SCREEN_WIDTH - 1, CONSOLE_SCREEN_HEIGHT - 1};
 
             ReadConsoleOutputA(consoleOutput, (CHAR_INFO *) buffer, bufferSize, bufferCoord, &region);
         }
 
-        void FillCell(SHORT x, SHORT y, CHAR c, WORD attr) {
+        /**
+         **	FillCell(SHORT x, SHORT y, CHAR c, WORD attr):
+         **
+         **		Fill the selected cell (buffer[y][x]) with
+         ** 	an ASCII CHAR c and some ATTRIBUTES attr.
+         **/
+        inline void FillCell(SHORT x, SHORT y, CHAR c, WORD attr) noexcept {
             buffer[y][x].Attributes = attr;
             buffer[y][x].Char.AsciiChar = c;
         }
 
-        void DrawBuffer() {
+        /**
+         **	DrawBuffer():
+         **
+         **		Draw the buffer into the screen.
+         **
+         ** 	Call it after have drawned something.
+         **/
+        inline void DrawBuffer() noexcept {
             WriteConsoleOutputA(consoleOutput, (CHAR_INFO *) buffer, bufferSize, bufferCoord, &region);
         }
 
-        static void DrawBufferRegion(SHORT x, SHORT y, SHORT columns, SHORT rows) {
-            SMALL_RECT region = {x, y, x + columns - 1, y + rows - 1};
-            WriteConsoleOutputA(consoleOutput, (CHAR_INFO *) buffer, bufferSize, {x, y}, &region);
+        /**
+         ** DrawBufferRegion(SHORT x, SHORT y, SHORT columns, SHORT rows):
+         **
+         **		Draw a region of the buffer into the screen.
+         **		The region is defined by the topleft corner
+         **		[x, y] coordinates and the number of rows
+         **		and columns.
+         **
+         ** 	Call it after have drawned something.
+         **/
+        void DrawBufferRegion(SHORT x, SHORT y, SHORT columns, SHORT rows) noexcept {
+            SMALL_RECT nRegion = {x, y, static_cast<SHORT>(x + columns - 1), static_cast<SHORT>(y + rows - 1)};
+            WriteConsoleOutputA(consoleOutput, (CHAR_INFO *) buffer, bufferSize, {x, y}, &nRegion);
         }
 
-        static void FillBuffer(CHAR c, WORD attr) {
+        /**
+         ** FillBuffer(CHAR c, WORD attr):
+         **
+         ** 	Fill the entire buffer with an ASCII CHAR c
+         ** 	and some ATTRIBUTES attr.
+         **
+         ** 	ex. Use FillBuffer(' ', F_BLACK | B_BLACK)
+         ** 	to display black screen;
+         **/
+        void FillBuffer(CHAR c, WORD attr) noexcept {
             CHAR_INFO ci;
             ci.Attributes = attr;
             ci.Char.AsciiChar = c;
 
-            for (unsigned short y = 0; y < SCREEN_HEIGHT; ++y)
-                for (unsigned short x = 0; x < SCREEN_WIDTH; ++x)
-                    buffer[y][x] = ci;
+            for (auto & y : buffer)
+                for (auto & x : y)
+                    x = ci;
         }
 
-        void DrawFrame(int x, int y, int w, int h, FrameType type, unsigned char attr) {
+        /**
+         ** DrawFrame(int x, int y, int w, int h, FrameType type, unsigned char attr):
+         **
+         **		Draw a simple frame using x & y
+         **		coordinates, w & h as width and height
+         **		and attr to display it colored.
+         **
+         **		ex.
+         **		FrameType::SINGLE	FrameType::DOUBLE
+         ** 	┌──┐				╔══╗
+         **		│  │				║  ║
+         **		└──┘				╚══╝
+         **/
+        void DrawFrame(int x, int y, int w, int h, FrameType type, unsigned char attr) noexcept {
             --w;
             --h;
             static const char c[2][6] = {{(char) 201, (char) 187, (char) 200, (char) 188, (char) 205, (char) 186},
@@ -115,40 +204,69 @@ namespace Yrin::Console {
             }
         }
 
-        void DrawWords(int x, int y, const char *text, size_t n, unsigned char attr) {
+        /**
+         ** DrawWords(int x, int y, const char* text, const int n, unsigned char attr):
+         **
+         **		Draw some text into the screen using
+         **		x & y coordinates and the attr value
+         **		to display it colored.
+         **
+         **		Text is a const char array and n is
+         **		its size.
+         **		Pass NULL to draw the entire text.
+         **/
+        void DrawWords(int x, int y, const char *text, size_t n, unsigned char attr) noexcept {
             if (n == NULL) n = strlen(text);
 
             for (int i = 0; i < n; ++i)
                 FillCell(x + i, y, text[i], attr);
         }
 
-        static void SetTitle(const char *title) {
+        /**
+         ** SetTitle(const char* title):
+         **
+         **		Set console title.
+         **/
+        inline static void SetTitle(const char *title) noexcept {
             SetConsoleTitle(title);
         }
 
-        void SetWindowSize(SHORT width, SHORT height, bool adjustBuffer) {
+        /**
+         ** SetWindowSize(SHORT width, SHORT height, bool adjustBuffer):
+         **
+         ** 	Set window size and if adjustBuffer flag is
+         ** 	setted to true, the buffer is resized too.
+         **
+         **/
+        void SetWindowSize(SHORT width, SHORT height, bool adjustBuffer) const noexcept {
             SMALL_RECT rect = {0, 0, width, height};
             if (adjustBuffer) SetConsoleScreenBufferSize(consoleOutput, {width, height});
             SetConsoleWindowInfo(consoleOutput, TRUE, &rect);
         }
 
-        void FillCell(SHORT x, SHORT y, CHAR c, WORD attr) {
-            buffer[y][x].Attributes = attr;
-            buffer[y][x].Char.AsciiChar = c;
-        }
 
-        void ShowConsoleCursor(BOOL visible) {
+        /**
+         ** ShowConsoleCursor(BOOL visible):
+         **
+         ** 	Set cursor visibility.
+         **/
+        void ShowConsoleCursor(BOOL visible) const noexcept {
             CONSOLE_CURSOR_INFO cursorInfo;
             GetConsoleCursorInfo(consoleOutput, &cursorInfo);
             cursorInfo.bVisible = visible;
             SetConsoleCursorInfo(consoleOutput, &cursorInfo);
         }
 
-        void Gotoxy(SHORT x, SHORT y) {
+        /**
+         ** Gotoxy(SHORT x, SHORT y):
+         **
+         ** 	Set cursor position at [x, y].
+         **/
+        inline void Gotoxy(SHORT x, SHORT y) const noexcept {
             SetConsoleCursorPosition(consoleOutput, {x, y});
         }
     };
 
 } // Yrin::ConsoleDraw
 
-#endif //YRINVM_YRIN_CONSOLE_DRAW_HPP
+#endif //YRINVM_YRIN_WIN_CONSOLE_HPP

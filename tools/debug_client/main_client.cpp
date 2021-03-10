@@ -1,12 +1,4 @@
-#include "yrin_defs.hpp"
-#include <cstdlib>
-
-#ifdef _WIN32
-#define _WIN32_WINNT 0x0A00
-#endif
-
-#define ASIO_STANDALONE
-#include <asio.hpp>
+#include "yrin_client.hpp"
 
 inline void log_yvm_client_usage() noexcept {
     LOG("Usage:\n");
@@ -39,6 +31,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    // TODO: asio client setup
+    // Client run
+    Yrin::DebugVm::Client client(port);
+    client.run();
     return 0;
 }
